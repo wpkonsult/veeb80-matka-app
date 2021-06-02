@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matkaklubi</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="matkaklubi.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <%- include ("../partials/pais.ejs") %>
+        <div>
+            <h2>Uudised ja kommentaarid</h2>
+            <div id="uudistekonteiner">
+                <div class="postitus pt-3">
+                    <div class="d-flex justify-content-between">
+                        <h3>Esimene uudis</h3>
+                        <div class="postitus-kuupaev">02.01.2021</div>
+                    </div>
+                    <div class="postitus-sisu">Esimene uudis mis räägib sellest et matkata on hea</div>
+                </div>
+                <div class="postitus pt-3">
+                    <div class="d-flex justify-content-between">
+                        <h3>Teine uudis</h3>
+                        <div class="postitus-kuupaev">13.03.2021</div>
+                    </div>
+                    <div class="postitus-sisu">Teine uudis mis tõestab, et matkamine on tervisele kasulik</div>
+                </div>
+                <div class="postitus pt-3">
+                    <div class="d-flex justify-content-between">
+                        <h3>Kolmas uudis</h3>
+                        <div class="postitus-kuupaev">25.034.2021</div>
+                    </div>
+                    <div class="postitus-sisu">Kolmas uudis räägib matkamise sotsiaalsest headusest</div>
+                </div>
+            </div>
+        </div>
+</body>
+
+</html>
