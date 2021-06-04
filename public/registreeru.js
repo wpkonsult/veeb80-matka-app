@@ -7,6 +7,7 @@ function registreeru(matkaIndeks) {
     const nimi = document.getElementById("nimi").value
     const email = document.getElementById("email").value
     const teade = document.getElementById("teade").value
+    const jalusElement = document.getElementById("jalus")
 
     //siin saab teha validatsioone
     if (!isEmail(email)) {
@@ -31,5 +32,10 @@ function registreeru(matkaIndeks) {
 
     $.ajax(settings).done(function (response) {
         console.log("Registreerimine õnnestus")
+        jalusElement.innerHTML = `
+        <div class="alert alert-success">
+        ${nimi} - registreerumine õnnestus
+        </div>
+        `
     })
 }

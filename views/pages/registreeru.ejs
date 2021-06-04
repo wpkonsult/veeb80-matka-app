@@ -21,6 +21,9 @@
                 <p>
                     <%= matkaAndmed.kirjeldus %>
                 </p>
+                <p>
+                    Matkale on registreerunud <%= matkaAndmed.registreerunud.length %> inimest
+                </p>
                 <div>
                     <form action="#">
                         <div class="form-group">
@@ -35,7 +38,9 @@
                             <label for="comment">Teade:</label>
                             <textarea class="form-control" rows="5" name="comment" id="teade"></textarea>
                         </div>
-                        <a class="btn btn-default" onclick="registreeru(<%= matkaNumber %>)" >Saada</a>
+                        <div id="jalus">
+                            <a class="btn btn-default" onclick="registreeru(<%= matkaNumber %>)" >Saada</a>
+                        </div>
                     </form>
                 </div>
             </div>
