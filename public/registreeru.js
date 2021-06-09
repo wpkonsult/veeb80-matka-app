@@ -31,7 +31,7 @@ function registreeru(matkaIndeks) {
     }
 
     $.ajax(settings).done(function (response) {
-        console.log("Registreerimine õnnestus")
+        console.log("Registreerimine õnnestus!")
         jalusElement.innerHTML = `
         <div class="alert alert-success">
         ${nimi} - registreerumine õnnestus
