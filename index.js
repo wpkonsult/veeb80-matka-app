@@ -2,6 +2,88 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 
+const { MongoClient } = require("mongodb")
+
+const mongoUri = "mongodb+srv://veeb80:HerneSupp12@cluster0.mm2xg.mongodb.net/matkaklubi?retryWrites=true&w=majority"
+
+async function leiaRegistreerumised(req, res) {
+  const client = new MongoClient(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+   });
+
+   let regFilter = {}
+
+   if (req.query.matk) {
+     regFilter = {matkaIndeks: req.query.matk}
+   }
+
+   await client.connect()
+   const database = client.db("matkaklubi")
+   const registreerumised = database.collection("registreerumised")
+   const result = registreerumised.find(regFilter)
+   const tulemus = []
+   await result.forEach((reg) => {
+     tulemus.push(reg)
+   })
+
+   await client.close()
+   return res.send(tulemus)
+}
+
+async function salvestaRegistreerimine(matkaIndeks, nimi, email, markus) {
+  const client = new MongoClient(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+   });
+
+   const registreerunu = {
+     matkaIndeks,
+     nimi,
+     email,
+     markus
+   }
+
+   await client.connect()
+   const database = client.db("matkaklubi")
+   const registreerumised = database.collection("registreerumised")
+   const result = await registreerumised.insertOne(registreerunu)
+
+   console.log(result.insertedId)
+
+   await client.close()
+
+   return true
+
+}
+
+async function lisaUudis(req, res) {
+  //Kuidas lugeda requestist uudise andmed?
+  //Kui andmed on loetud, loo uudise objekt
+  const uudis = {
+    matk: req.query.pealkiri,
+    nimi: req.query.uudis,
+  }
+
+  //Võta ühendust mongo andmebaasiga, vali kollektsioon "uudised"
+  const client = new MongoClient(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+   });
+
+   await client.connect()
+   const database = client.db("matkaklubi")
+   const registreerumised = database.collection("uudised")
+   
+   //Lisa uudise objekt andmebaasi
+   const result = await registreerumised.insertOne(uudis)
+   await client.close()
+   
+   //Saada endpoindile tagasi lisatud uudise id (sarnane registreerumisele)
+   console.log(result.insertedId)
+   res.send({status: "ok", lisatudId: result.insertedId})
+}
+ 
 const matk1 = {
   nimetus: "Jalgsimatk Kõrvemaal",
   pildiUrl: "./pildid/matkaja.png",
@@ -59,7 +141,7 @@ function registreeru(req, res) {
   res.render("pages/registreeru", {matkaNumber: matk, matkaAndmed: matkaAndmed})
 }
 
-function lisaRegistreerumine(req, res) {
+async function lisaRegistreerumine(req, res) {
   if (req.query.matk < 0 || req.query.matk >= matkad.length) {
     return res.send("Matka number on vale. Registreerumine ebaõnnestus")
   }
@@ -70,6 +152,16 @@ function lisaRegistreerumine(req, res) {
     email: req.query.email
   }
 
+  const result = await salvestaRegistreerimine(
+    req.query.matk,
+    req.query.nimi,
+    req.query.email,
+    req.query.markus,
+  )
+
+  if (!result) {
+    return res.send({viga: "Andmete salvestamine ebaõnnestus"})
+  }
 
   const matk = matkad[req.query.matk]
   matk.registreerunud.push(registreerumine)
@@ -92,8 +184,12 @@ express()
   .get('/', (req, res) => res.render('pages/index'))
   .get('/kontakt', (req, res) => res.render('pages/kontakt'))
   .get('/uudised', (req, res) => res.render('pages/uudised'))
+  .get('/admin', (req, res) => res.render('pages/admin', {matkad}))
+  .get('/admin/lisaUudis', (req, res) => res.render('pages/lisa_uudis'))
   .get('/registreeru/:matk', registreeru)
   .get('/aeg', aeg)
   .get('/api/registreeru', lisaRegistreerumine)
   .get('/api/matkad', saadaMatkad)
+  .get('/api/registreerumised', leiaRegistreerumised)
+  .get('/api/lisaUudis', lisaUudis)
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))

@@ -33,7 +33,14 @@ const matk4 = {
 
 const matkad = [matk1, matk2, matk3, matk4]
 
+
 function naitaMatkaAndmeid(matk, indeks) {
+    //Kustuta ära olemasolevad matkade andmed
+    //Lisa:
+    //const matkad = loeMatkad()
+    //Loo funktsioon loeMatkad mis loeb serverist matkade andmed
+    //kasuta selleks endpointi /api/matkad
+
     const valjundElement = document.getElementById("matkade_valjund")
     const vabadKohad = matk.kohti - matk.registreerunud.length
     let valjundHtml = `
