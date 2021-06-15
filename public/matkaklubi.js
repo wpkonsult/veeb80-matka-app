@@ -1,38 +1,22 @@
 console.log("test")
 
-const matk1 = {
-    nimetus: "Jalgsimatk Kõrvemaal",
-    pildiUrl: "./pildid/matkaja.png",
-    kohti: 12,
-    kirjeldus: "Kõnnime palju, aga loodus on ilus. Lõuna lõkkel.",
-    registreerunud: ['Mati', 'Kati', 'Rebase Rein', "Jänku Juta"],
-}
-const matk2 = {
-    nimetus: "Süstamatk ümber Hiiunmaa",
-    pildiUrl: "./pildid/syst1.jpg",
-    kohti: 6,
-    kirjeldus: "Sõidame palju, aga loodus on ilus. Lõuna lõkkel.",
-    registreerunud: ['Rebase Rein', "Jänku Juta"],
-}
+let matkad = []
 
-const matk3 = {
-    nimetus: "Jalgrattamatk Virumaal",
-    pildiUrl: "./pildid/matkaja.png",
-    kohti: 10,
-    kirjeldus: "Sõidame palju, aga loodus on ilus. Lõuna lõkkel.",
-    registreerunud: ['Rebase Rein', "Jänku Juta"],
+function loeMatkad() {
+    let aadress = "/api/matkad"
+    $.ajax({
+        url: aadress, 
+        method: "GET",
+    }).done(function(andmed) {
+        if (!andmed || !Array.isArray(andmed) ) {
+            console.log("Matkade lugemine ebaõnnestus")
+            return false
+        }
+        matkad = andmed
+        andmed.forEach(naitaMatkaAndmeid)
+    })
+   
 }
-
-const matk4 = {
-    nimetus: "Kepikõnnimatk ümber Tartu",
-    pildiUrl: "./pildid/matkaja.png",
-    kohti: 10,
-    kirjeldus: "Kõnnime palju, aga loodus on ilus. Lõuna lõkkel.",
-    registreerunud: ['Rebase Rein', "Jänku Juta"],
-}
-
-const matkad = [matk1, matk2, matk3, matk4]
-
 
 function naitaMatkaAndmeid(matk, indeks) {
     //Kustuta ära olemasolevad matkade andmed
@@ -69,4 +53,4 @@ function naitaMatkaAndmeid(matk, indeks) {
 
 //matkad.forEach((matk, indeks) => naitaMatkaAndmeid(matk, i))
 
-matkad.forEach(naitaMatkaAndmeid)
+loeMatkad()
